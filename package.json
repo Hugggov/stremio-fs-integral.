@@ -1,10 +1,17 @@
 {
-  "name": "stremio-fs",
+  "name": "stremio-fs-integral",
   "version": "1.0.0",
-  "scripts": { "start": "node index.js" },
+  "description": "Addon FrenchStream pour Stremio",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
-    "stremio-addon-sdk": "3.5.0",
-    "axios": "1.6.0",
-    "cheerio": "1.0.0-rc.12"
+    "stremio-addon-sdk": "^3.5.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
