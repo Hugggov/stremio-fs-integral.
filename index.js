@@ -1,11 +1,11 @@
-const { addonBuilder } = require("stremio-addon-sdk");
+const { addonBuilder, serveHTTP } = require("stremio-addon-sdk");
 const axios = require("axios");
 const cheerio = require("cheerio");
 
 const manifest = {
-    id: "org.frenchstream.integral.v1",
+    id: "org.frenchstream.integral.final",
     version: "1.0.0",
-    name: "FrenchStream Intégral",
+    name: "FS Intégral (30 pages)",
     resources: ["catalog"],
     types: ["movie", "series"],
     catalogs: [
@@ -17,7 +17,12 @@ const manifest = {
 const builder = new addonBuilder(manifest);
 
 builder.defineCatalogHandler(async ({ type, extra }) => {
-    const page = Math.floor((extra.skip || 0) / 20) + 1;
+    const skip = extra.skip || 0;
+    const page = Math.floor(skip / 20) + 1;
+
+    // Limite à 30 pages
+    if (page > 30) return { metas: [] };
+
     const url = `https://fs14.lol{type === "movie" ? "films" : "series"}/page/${page}/`;
     
     try {
@@ -38,9 +43,9 @@ builder.defineCatalogHandler(async ({ type, extra }) => {
         });
         return { metas };
     } catch (e) {
-        console.error(e);
         return { metas: [] };
     }
 });
 
-builder.serve({ port: process.env.PORT || 7000 });
+// Cette commande remplace tout le bloc Express et gère tout toute seule
+serveHTTP(builder.getInterface(), { port: process.env.PORT || 7000 });
