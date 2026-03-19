@@ -1,8 +1,13 @@
 {
-  "dependencies": {
-    "stremio-addon-sdk": "latest",
-    "axios": "latest",
-    "cheerio": "latest"
+  "name": "stremio-fs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
   },
-  "scripts": { "start": "node index.js" }
+  "dependencies": {
+    "stremio-addon-sdk": "^3.5.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12"
+  }
 }
