@@ -3,9 +3,9 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 
 const manifest = {
-    id: "org.fs.integral.hug",
+    id: "org.frenchstream.integral.v1",
     version: "1.0.0",
-    name: "FS Intégral",
+    name: "FrenchStream Intégral",
     resources: ["catalog"],
     types: ["movie", "series"],
     catalogs: [
@@ -23,14 +23,24 @@ builder.defineCatalogHandler(async ({ type, extra }) => {
     try {
         const { data } = await axios.get(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
         const $ = cheerio.load(data);
-        const metas = $(".short-story").map((i, el) => ({
-            id: "fs_" + $(el).find("a").attr("href").split('/').filter(Boolean).pop(),
-            type: type,
-            name: $(el).find(".short-title").text().trim(),
-            poster: "https://fs14.lol" + $(el).find("img").attr("src")
-        })).get();
+        const metas = [];
+
+        $(".short-story").each((i, el) => {
+            const relUrl = $(el).find("a").attr("href");
+            if (relUrl) {
+                metas.push({
+                    id: "fs_" + relUrl.split('/').filter(Boolean).pop(),
+                    type: type,
+                    name: $(el).find(".short-title").text().trim(),
+                    poster: "https://fs14.lol" + $(el).find("img").attr("src")
+                });
+            }
+        });
         return { metas };
-    } catch (e) { return { metas: [] }; }
+    } catch (e) {
+        console.error(e);
+        return { metas: [] };
+    }
 });
 
 builder.serve({ port: process.env.PORT || 7000 });
