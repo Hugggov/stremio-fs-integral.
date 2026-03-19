@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "stremio-addon-sdk": "latest",
+    "axios": "latest",
+    "cheerio": "latest"
+  },
+  "scripts": { "start": "node index.js" }
+}
